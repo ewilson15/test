@@ -16,19 +16,50 @@ def get_next_states(state):
     same_side = []
 
     for key in state:
-        #if state[key] == 
-            # append key to same side
+        if state["person"] == state[key] and key != "person":
+            same_side.append(key)
+    
 
-    #loop through same side
-    #make a new state one move away with each thing same side
+    for thing in same_side:
+        temp_state = copy.deepcopy(state)
+        temp_state["person"] = not state["person"]
+        temp_state[thing] = not state[thing]
+
+
+        if isValid(temp_state) == True:
+            next_states.append(temp_state)
+
+
+    just_person = copy.deepcopy(state)
+    just_person["person"] = not state["person"]
+
+
+    if isValid(just_person) == True:
+        next_states.append(just_person)
 
     return next_states
+
 
 
 # Define a recursive function that takes in a current_state and win_state and returns the path to those states using the Depth First Search algorithm
 # This function will need to call the function get_next_states(state), as well as itself
 def dfs(current_state, win_state):
-    
+
+    if current_state == win_state:
+        return True
+
+
+    next_states = get_next_states(current_state)
+    visited_states.append(current_state)
+
+
+    for state in next_states:
+        if state not in visited_states:
+            path.append(state)
+            if dfs(state, win_state) == True:
+                return True
+            path.pop()
+
     
 # Test your code! Does it solve the river crossing riddle?
 initial_state = {
